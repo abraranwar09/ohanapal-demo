@@ -3,7 +3,7 @@
 const originalButtonContent = thinkButton.innerHTML;
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const thinkButton = document.getElementById('thinkButton');
 
     const recordButton = document.getElementById('recordButton');
@@ -43,8 +43,26 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('User Timezone:', userTimeZone);
     const formattedToday = today.toLocaleString('en-US', { timeZone: userTimeZone }).replace(',', '');    
 
+
+    //make an api call to get user information and check if the user has a userName
+    const token = localStorage.getItem('token');
+    const response = await fetch("http://localhost:3000/api/user", {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    const data = await response.json();
+    let prompt = "";
+
+    if (data.userName) {
+    console.log('User name found:', data.userName);
     //reprompt
-    const prompt = "Remember the user has autism. Answer the user's question and provide helpful information. The users timezone is " + userTimeZone + ". For context, today's date/time is " + formattedToday + ".";
+     prompt = "The user's name is " + data.userName + ". Remember the user has autism. Answer the user's question and provide helpful information. The users timezone is " + userTimeZone + ". For context, today's date/time is " + formattedToday + ".";
+    } else {
+    //reprompt
+     prompt = "Remember the user has autism. Answer the user's question and provide helpful information. The users timezone is " + userTimeZone + ". For context, today's date/time is " + formattedToday + ".";
+    }
+    
     
     //record button click function
     recordButton.addEventListener('click', function() {
