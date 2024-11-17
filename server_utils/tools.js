@@ -70,6 +70,40 @@ const tools = [
             },
         },
     },
+    {
+        type: "function",
+        function: {
+            name: "saveEvent",
+            description: "Saves an event to the user's Google Calendar.",
+            parameters: {
+                type: "object",
+                properties: {
+                    summary: {
+                        type: "string",
+                        description: "The title or summary of the event.",
+                    },
+                    location: {
+                        type: "string",
+                        description: "The location where the event will take place.",
+                    },
+                    description: {
+                        type: "string",
+                        description: "A detailed description of the event.",
+                    },
+                    start: {
+                        type: "string",
+                        description: "The start date and time of the event in ISO 8601 format.",
+                    },
+                    end: {
+                        type: "string",
+                        description: "The end date and time of the event in ISO 8601 format.",
+                    },
+                },
+                required: ["summary", "location", "description", "start", "end"],
+                additionalProperties: false,
+            },
+        },
+    }
 ];
 
 module.exports = tools;

@@ -77,7 +77,40 @@ async function getCalendarEvents(timePeriod, query) {
     const data = await response.json();
     console.log(data);
 
-    processResponse(`Here are the events from the past ${timePeriod}: ${JSON.stringify(data)}. Today's date is ${formattedToday}. The user's query is: ${query}`, sessionId);
+    processResponse(`A function call has been completed using your getCalendarEvents tool. Here are the events from the past ${timePeriod}: ${JSON.stringify(data)}. Today's date is ${formattedToday}. The user's query is: ${query}`, sessionId);
+}
+
+// Function to save a calendar event
+async function saveEvent(summary, location, description, start, end) {
+    const accessToken = localStorage.getItem('accessToken');
+    const calendarId = localStorage.getItem('userEmail');
+    const sessionId = localStorage.getItem('sessionId');
+
+    const response = await fetch("http://localhost:3000/calendar/save-event", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            accessToken: accessToken,
+            calendarId: calendarId,
+            summary: summary,
+            location: location,
+            description: description,
+            start: start,
+            end: end
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    processResponse(`A function call has been completed to save an event to the calendar. Say to the user: Your event has been saved to the calendar. The name is ${data.summary}. Your link is ${data.htmlLink}`, sessionId);
+
 }
 
 

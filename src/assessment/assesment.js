@@ -36,8 +36,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const sessionId = "session_" + Date.now();
     localStorage.setItem('sessionId', sessionId);
 
+
+    //get todays date and time and format it        
+    const today = new Date();
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log('User Timezone:', userTimeZone);
+    const formattedToday = today.toLocaleString('en-US', { timeZone: userTimeZone }).replace(',', '');    
+
     //reprompt
-    const prompt = "Remember the user has autism. Answer the user's question and provide helpful information.";
+    const prompt = "Remember the user has autism. Answer the user's question and provide helpful information. The users timezone is " + userTimeZone + ". For context, today's date/time is " + formattedToday + ".";
     
     //record button click function
     recordButton.addEventListener('click', function() {
@@ -166,6 +173,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                 if (parsedResult.tool_calls[0].function.name === 'getCalendarEvents') {
                                     const args = JSON.parse(parsedResult.tool_calls[0].function.arguments);
                                     await getCalendarEvents(args.timePeriod, args.query);
+                                };
+
+
+                                if (parsedResult.tool_calls[0].function.name === 'saveEvent') {
+                                    const args = JSON.parse(parsedResult.tool_calls[0].function.arguments);
+                                    await saveEvent(args.summary, args.location, args.description, args.start, args.end);
                                 };
                                
                             }

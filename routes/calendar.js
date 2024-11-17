@@ -110,5 +110,50 @@ router.post('/events', async (req, res) => {
     }
 });
 
+router.post('/save-event', async (req, res) => {
+    try {
+        const { accessToken, calendarId, summary, location, description, start, end } = req.body;
+
+        // Initialize the Google Calendar API client
+        const auth = new google.auth.OAuth2();
+        auth.setCredentials({ access_token: accessToken });
+
+        const calendar = google.calendar({ version: 'v3', auth });
+
+        // Define the event object
+        const event = {
+            summary: summary,
+            location: location,
+            description: description,
+            start: {
+                dateTime: start, // e.g., '2023-10-01T09:00:00-07:00'
+                timeZone: 'America/Los_Angeles', // Adjust the time zone as needed
+            },
+            end: {
+                dateTime: end, // e.g., '2023-10-01T17:00:00-07:00'
+                timeZone: 'America/Los_Angeles', // Adjust the time zone as needed
+            },
+        };
+
+        // Use the Google Calendar API to insert the event
+        calendar.events.insert({
+            calendarId: calendarId,
+            resource: event,
+        }, (err, event) => {
+            if (err) {
+                console.error('The API returned an error: ' + err);
+                return res.status(500).send('Error creating calendar event: ' + err.message);
+            }
+            res.status(201).json(event.data);
+        });
+
+    } catch (error) {
+        res.status(500).send('Error creating calendar event: ' + error.message);
+    }
+});
+
+
 
 module.exports = router;
+
+
