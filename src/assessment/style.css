@@ -1,0 +1,244 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('../assets/wallpaper2.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #e2e8f0;
+    position: relative;
+    overflow: hidden;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+    mix-blend-mode: overlay;
+    animation: shimmer 5s infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.logo {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 100px;
+    margin-top: 20px;
+}
+
+.top-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    color: #63b3ed;
+    border: 2px solid #63b3ed;
+    padding: 10px 20px;
+    border-radius: 9999px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 40px;
+}
+
+.top-button:hover {
+    background-color: rgba(99, 179, 237, 0.1);
+}
+
+.top-button svg {
+    margin-right: 8px;
+}
+
+.messages {
+    margin-bottom: 40px;
+}
+
+.message {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.message.light {
+    color: #a0aec0;
+    font-weight: 300;
+}
+
+.visualization {
+    display: flex;
+    /* justify-content: center; */
+    align-items: flex-end;
+    height: 100px;
+    margin-bottom: 80px;
+    margin-top: 50px;
+    padding-top: 100px;
+}
+
+.bar {
+    width: 4px;
+    background-color: #63b3ed;
+    margin: 0 2px;
+    transition: height 0.1s ease;
+}
+
+.controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(to top, #1a202c, transparent);
+}
+
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #2d3748;
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: -30px;
+}
+
+.chat-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #4a5568;
+    color: #e2e8f0;
+    font-size: 16px;
+}
+
+.chat-input::placeholder {
+    color: #a0aec0;
+}
+
+.chat-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #63b3ed;
+}
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.control-button {
+    background-color: transparent;
+    border: none;
+    color: #a0aec0;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.control-button:hover {
+    background-color: #4a5568;
+    color: #63b3ed;
+}
+
+.record-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #2d3748;
+    border: 2px solid #63b3ed;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.record-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background-color: #63b3ed;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.record-button::after {
+    content: '00:00';
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: #a0aec0;
+}
+
+.record-button.recording::before {
+    background-color: #fc8181;
+}
+
+.hidden {
+    display: none;
+}
+
+#lottieContainer {
+    position: absolute;
+    display: none;
+    top: 140px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* z-index: 10; Ensure it appears above other elements */
+}
+
+
+.spinner {
+    border: 2px solid #f3f3f3; /* Light grey */
+    border-top: 2px solid #3498db; /* Blue */
+    border-radius: 50%;
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

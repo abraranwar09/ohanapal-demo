@@ -1,0 +1,84 @@
+<style>
+    body {
+        background-color: #101727;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .spinner {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #39a3e6;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<div class="spinner"></div>
+
+<script>
+    // Function to get query parameters from URL
+    function getQueryParams() {
+        const params = {};
+        window.location.search.substring(1).split('&').forEach(pair => {
+            const [key, value] = pair.split('=');
+            params[key] = decodeURIComponent(value);
+        });
+        return params;
+    }
+
+    // Check for token and accessToken in URL and store them in localStorage
+    const params = getQueryParams();
+    if (params.token) {
+        localStorage.setItem('token', params.token);
+    }
+    if (params.accessToken) {
+        localStorage.setItem('accessToken', params.accessToken);
+    }
+    // Optionally, remove the token and accessToken from the URL
+    if (params.token || params.accessToken) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    async function checkAssessmentAndRedirect() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const response = await fetch('/api/user', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const user = await response.json();
+                    if (user.isAssementComplete) {
+                        window.location.href = '/dashboard';
+                    } else {
+                        window.location.href = '/assessment';
+                    }
+                } else {
+                    window.location.href = '/sign-up';
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                window.location.href = '/sign-up';
+            }
+        } else {
+            window.location.href = '/sign-up';
+        }
+    }
+
+    window.addEventListener('load', checkAssessmentAndRedirect);
+</script>
