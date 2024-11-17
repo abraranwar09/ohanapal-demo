@@ -180,6 +180,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                     const args = JSON.parse(parsedResult.tool_calls[0].function.arguments);
                                     await saveEvent(args.summary, args.location, args.description, args.start, args.end);
                                 };
+
+                                if (parsedResult.tool_calls[0].function.name === 'patchUserInformation') {
+                                    const args = JSON.parse(parsedResult.tool_calls[0].function.arguments);
+                                    await patchUserInformation(args.userName, args.age, args.gender, args.assessmentSummary);
+                                };
                                
                             }
                         })

@@ -14,7 +14,7 @@ const openai = new OpenAI();
 
 const systemMessage = { 
     role: "system", 
-    content: [{ type: "text", text: "Your name is Ohana.You are a helpful assistant. Ask users relevant questions till you have the information ready to generate an agent profile for them. Begin this proccess once the user says hi!" }]
+    content: [{ type: "text", text: `Your name is Ohana.You are a helpful assistant. Ask users relevant questions till you have the information ready to generate an agent profile for them. Begin this proccess once the user says hi!` }]
 }
 
 

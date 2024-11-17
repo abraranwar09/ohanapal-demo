@@ -18,4 +18,26 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.patch('/', async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const { userName, age, gender, assessmentSummary } = req.body;
+
+    try {
+        const decoded = jwt.verify(token, 'your_jwt_secret');
+        const updatedUser = await User.findByIdAndUpdate(
+            decoded.id,
+            { $set: { userName, age, gender, assessmentSummary } },
+            { new: true, runValidators: true, omitUndefined: true }
+        );
+
+        if (updatedUser) {
+            res.json(updatedUser);
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (error) {
+        res.status(401).send('Invalid token');
+    }
+});
+
 module.exports = router;

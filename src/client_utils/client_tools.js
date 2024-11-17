@@ -113,4 +113,39 @@ async function saveEvent(summary, location, description, start, end) {
 
 }
 
+// Function to patch user information
+async function patchUserInformation(userName, age, gender, assessmentSummary) {
+    const token = localStorage.getItem('token');
+    const sessionId = localStorage.getItem('sessionId');
+
+    // Construct the request body with only provided parameters
+    const requestBody = {};
+    if (userName !== undefined) requestBody.userName = userName;
+    if (age !== undefined) requestBody.age = age;
+    if (gender !== undefined) requestBody.gender = gender;
+    if (assessmentSummary !== undefined) requestBody.assessmentSummary = assessmentSummary;
+
+    try {
+        const response = await fetch("http://localhost:3000/api/user", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log(data);
+
+        processResponse(`User information has been updated successfully. Here are the updated details: ${JSON.stringify(data)}`, sessionId);
+    } catch (error) {
+        console.error('Error updating user information:', error);
+        processResponse('There was an error. You should say: There was an error updating the user information. Please try again later.', sessionId);
+    }
+}
 

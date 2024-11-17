@@ -28,14 +28,6 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    assessmentData: {
-        type: Object,
-        default: {}
-    },
-    interpreterProfile: {
-        type: Object,
-        default: {}
-    },
     userName: {
         type: String,
         default: ''
@@ -44,13 +36,18 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    gender: {
+        type: String,
+        default: ''
+    },
+    assessmentSummary: {
+        type: String,
+        default: ''
+    },
     parsedLocation: {
         type: String,
         default: ''
     }
-
-
-
 });
 
 const User = mongoose.model('User', userSchema);

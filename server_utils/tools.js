@@ -103,6 +103,36 @@ const tools = [
                 additionalProperties: false,
             },
         },
+    },
+    {
+        type: "function",
+        function: {
+            name: "patchUserInformation",
+            description: "Updates user information using optional parameters.",
+            parameters: {
+                type: "object",
+                properties: {
+                    userName: {
+                        type: "string",
+                        description: "Optional new user name.",
+                    },
+                    age: {
+                        type: "integer",
+                        description: "Optional new age.",
+                    },
+                    gender: {
+                        type: "string",
+                        description: "Optional new gender.",
+                    },
+                    assessmentSummary: {
+                        type: "string",
+                        description: "Optional new assessment summary.",
+                    },
+                },
+                required: [],
+                additionalProperties: false,
+            },
+        },
     }
 ];
 
