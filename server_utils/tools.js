@@ -108,25 +108,25 @@ const tools = [
         type: "function",
         function: {
             name: "patchUserInformation",
-            description: "Updates user information using optional parameters.",
+            description: "Updates/Saves new user information using optional parameters.",
             parameters: {
                 type: "object",
                 properties: {
                     userName: {
                         type: "string",
-                        description: "Optional new user name.",
+                        description: "New user name.",
                     },
                     age: {
                         type: "integer",
-                        description: "Optional new age.",
+                        description: "The users age.",
                     },
                     gender: {
                         type: "string",
-                        description: "Optional new gender.",
+                        description: "The user's gender.",
                     },
                     assessmentSummary: {
                         type: "string",
-                        description: "Optional new assessment summary.",
+                        description: "The summary of the full assessment of the users capabilities and pain points.",
                     },
                 },
                 required: [],
