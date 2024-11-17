@@ -10,7 +10,7 @@ OhanaPal is an AI assistant for people with autism. It is a web application that
 
    ```bash
    git clone <repository-url>
-   cd ohanapal
+   cd ohanapal-demo
    ```
 
 2. **Install dependencies:**
