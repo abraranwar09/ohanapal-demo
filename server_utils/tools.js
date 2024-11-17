@@ -47,6 +47,29 @@ const tools = [
             },
         },
     },
+    {
+        type: "function",
+        function: {
+            name: "getCalendarEvents",
+            description: "You can use the Google API to fetch the user's events based on time period.",
+            parameters: {
+                type: "object",
+                properties: {
+                    timePeriod: {
+                        type: "string",
+                        description: "Allows you to control the time period of events retrieved. All values include today.",
+                        enum: ["last 30 days", "last week", "today", "next week", "next 30 days"],
+                    },
+                    query: {
+                        type: "string",
+                        description: "The query the user is asking about his past events.",
+                    },
+                },
+                required: ["timePeriod", "query"],
+                additionalProperties: false,
+            },
+        },
+    },
 ];
 
 module.exports = tools;

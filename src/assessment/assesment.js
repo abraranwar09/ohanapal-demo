@@ -162,6 +162,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                     const args = JSON.parse(parsedResult.tool_calls[0].function.arguments);
                                     await generateProfile(args.taskDescription, args.industry, args.additionalRequirements, args.model);
                                 };
+
+                                if (parsedResult.tool_calls[0].function.name === 'getCalendarEvents') {
+                                    const args = JSON.parse(parsedResult.tool_calls[0].function.arguments);
+                                    await getCalendarEvents(args.timePeriod, args.query);
+                                };
                                
                             }
                         })

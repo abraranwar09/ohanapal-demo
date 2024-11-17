@@ -48,3 +48,36 @@ async function hitProfileAPI(taskDescription, industry, additionalRequirements, 
     // console.log(responseData);
     return responseData;
 }
+
+// Function to get calendar events
+async function getCalendarEvents(timePeriod, query) {
+    const accessToken = localStorage.getItem('accessToken');
+    const calendarId = localStorage.getItem('userEmail');
+    const sessionId = localStorage.getItem('sessionId');
+
+    //get todays date
+    const today = new Date();
+    const formattedToday = today.toISOString().split('T')[0];
+    const response = await fetch("http://localhost:3000/calendar/events", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            accessToken: accessToken,
+            calendarId: calendarId,
+            timePeriod: timePeriod
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    processResponse(`Here are the events from the past ${timePeriod}: ${JSON.stringify(data)}. Today's date is ${formattedToday}. The user's query is: ${query}`, sessionId);
+}
+
+
