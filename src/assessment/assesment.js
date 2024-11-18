@@ -1,3 +1,4 @@
+
 //system message for the assessment
 const systemMessage = `Your name is Ohana.You are a helpful assistant. Ask users relevant questions till you have the information ready to generate an agent profile for them. Begin this proccess once the user says hi!`;
 
@@ -96,7 +97,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Change button to show loading state
         thinkButton.innerHTML = '<div class="spinner"></div> Ohana is thinking...';
 
-        const message = chatInput.value;
+        const message = chatInput.value + ' ' + `Hidden context: ${prompt}`;
         const sessionId = localStorage.getItem('sessionId');
         processResponse(message, sessionId, systemMessage);
         chatInput.value = '';
@@ -156,6 +157,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                         .then(async result => {
                             const parsedResult = JSON.parse(result);
                             console.log(parsedResult);
+
+                            handleToolCalls(parsedResult);
+
                             var logoImage = document.getElementById('logoImage');
                             logoImage.classList.add('animate__animated', 'animate__zoomOut');
 
@@ -191,36 +195,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                                 // Revert button to original state
                                 thinkButton.innerHTML = originalButtonContent;
-                            } else {
-                                 //handle tool calls
-                                 console.log(parsedResult.tool_calls[0].function.name);
-                                //check for function name and construct function call
-                                if (parsedResult.tool_calls[0].function.name === 'openGoogle') {
-                                    const args = JSON.parse(parsedResult.tool_calls[0].function.arguments);
-                                    await openGoogle(args.query, parsedResult.tool_calls[0].id);
-                                };
-
-                                if (parsedResult.tool_calls[0].function.name === 'generateProfile') {
-                                    const args = JSON.parse(parsedResult.tool_calls[0].function.arguments);
-                                    await generateProfile(args.taskDescription, args.industry, args.additionalRequirements, args.model);
-                                };
-
-                                if (parsedResult.tool_calls[0].function.name === 'getCalendarEvents') {
-                                    const args = JSON.parse(parsedResult.tool_calls[0].function.arguments);
-                                    await getCalendarEvents(args.timePeriod, args.query);
-                                };
-
-
-                                if (parsedResult.tool_calls[0].function.name === 'saveEvent') {
-                                    const args = JSON.parse(parsedResult.tool_calls[0].function.arguments);
-                                    await saveEvent(args.summary, args.location, args.description, args.start, args.end);
-                                };
-
-                                if (parsedResult.tool_calls[0].function.name === 'patchUserInformation') {
-                                    const args = JSON.parse(parsedResult.tool_calls[0].function.arguments);
-                                    await patchUserInformation(args.userName, args.age, args.gender, args.assessmentSummary);
-                                };
-                               
                             }
                         })
                         .catch(error => {

@@ -77,7 +77,7 @@ async function getCalendarEvents(timePeriod, query) {
     const data = await response.json();
     console.log(data);
 
-    processResponse(`A function call has been completed using your getCalendarEvents tool. Here are the events from the past ${timePeriod}: ${JSON.stringify(data)}. Today's date is ${formattedToday}. The user's query is: ${query}`, sessionId);
+    processResponse(`A tool call has been completed using your getCalendarEvents tool. This is the tool call response containing the events from the past ${timePeriod}: ${JSON.stringify(data)}. Today's date is ${formattedToday}. The user's query is: ${query}. You do not have to specifically output all data. Remember to optimize your sentence to be spoken out loud.`, sessionId);
 }
 
 // Function to save a calendar event
@@ -109,7 +109,7 @@ async function saveEvent(summary, location, description, start, end) {
     const data = await response.json();
     console.log(data);
 
-    processResponse(`A function call has been completed to save an event to the calendar. Say to the user: Your event has been saved to the calendar. The name is ${data.summary}. Your link is ${data.htmlLink}`, sessionId);
+    processResponse(`A tool call has been completed to save an event to the calendar. The response is: ${JSON.stringify(data)}. Say to the user: Your event has been saved to the calendar. You do not have to specifically output all data but mention the name, date and start time. Remember to optimize your sentence to be spoken out loud.`, sessionId);
 
 }
 
