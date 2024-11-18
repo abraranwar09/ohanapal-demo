@@ -133,6 +133,24 @@ const tools = [
                 additionalProperties: false,
             },
         },
+    },
+    {
+        type: "function",
+        function: {
+            name: "cameraCapture",
+            description: "Take pictures from a camera connected to the user's Raspberry Pi. Helps get context about their room, surroundings and help them.",
+            parameters: {
+                type: "object",
+                properties: {
+                    query: {
+                        type: "string",
+                        description: "The query the user has about the image (helps with image analysis).",
+                    },
+                },
+                required: ["query"],
+                additionalProperties: false,
+            },
+        },
     }
 ];
 

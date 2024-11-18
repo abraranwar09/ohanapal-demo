@@ -11,3 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }, index * 100);
     });
 });
+
+
+// General Chat Card
+document.getElementById('generalChatCard').addEventListener('click', () => {
+    window.location.href = '/general-chat';
+});

@@ -20,6 +20,9 @@ async function handleToolCalls(parsedResult) {
             case 'patchUserInformation':
                 patchUserInformation(args.userName, args.age, args.gender, args.assessmentSummary);
                 break;
+            case 'cameraCapture':
+                cameraCapture(args.query);
+                break;
             default:
                 console.warn(`Unhandled function name: ${functionName}`);
         }

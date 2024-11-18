@@ -28,7 +28,11 @@ connectDB();
 app.use(express.static(path.join(__dirname, 'src')));
 
 // Middleware to parse JSON bodies
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+// Increase the limit to 10MB (or any size you need)
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+
 
 // Initialize session middleware
 app.use(session({

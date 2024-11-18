@@ -149,3 +149,73 @@ async function patchUserInformation(userName, age, gender, assessmentSummary) {
     }
 }
 
+// tool to capture image from users raspberry pi
+async function cameraCapture(query) {
+    const piUrl = localStorage.getItem('piUrl');
+    const sessionId = localStorage.getItem('sessionId');
+    console.log(piUrl);
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+        "command": "~/capture_image.sh",
+        "args": []
+    });
+
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+    };
+
+    var output = "";
+
+    try {
+        const response = await fetch(`${piUrl}/api/run-command`, requestOptions);
+        const result = await response.text();
+        const parsedResult = JSON.parse(result);
+        output = parsedResult.output;
+    } catch (error) {
+        console.error(error);
+    }
+
+    //split output by the the text 'Still capture image received'
+    var splitOutput = output.split('Still capture image received');
+    var base64Image = splitOutput[1];
+
+    var processOutput = await processImage(`data:image/jpeg;base64,${base64Image}`, query);
+    var parsedOutput = JSON.parse(processOutput);
+    console.log(parsedOutput.message);
+
+    processResponse(`The image has been captured and processed using your camera capture tool. The response is: ${parsedOutput.message}`, sessionId);
+}
+
+async function processImage(base64Image, query) {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Cookie", "connect.sid=s%3AitKwfr0EunoT4AGCQ74-NLq3PynS9-uJ.Gj0zQjeI3l%2BhwjJV9eFmSsoDjKOUCBjv0JVCUDKLqo0");
+
+    const raw = JSON.stringify({
+        "base64_image": base64Image,
+        "query": query
+    });
+
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+    };
+
+    try {
+        const response = await fetch("http://localhost:3000/api/audio/process-image", requestOptions);
+        const result = await response.text();
+        // console.log(result);
+        return result;
+    } catch (error) {
+        console.error(error);
+    }
+}
+

@@ -282,6 +282,42 @@ router.post('/process-text', async (req, res) => {
     }
 });
 
+router.post('/process-image', async (req, res) => {
+    const { base64_image, query } = req.body;
+
+
+    try {
+        const response = await openai.chat.completions.create({
+            model: "gpt-4o",
+            messages: [
+                {
+                    role: "user",
+                    content: [
+                        { type: "text", text: query },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                url: `${base64_image}`,
+                            },
+                        },
+                    ],
+                },
+            ],
+        });
+
+        console.log(response.choices[0]);
+
+        res.json({
+            message: response.choices[0].message.content,
+            finish_reason: response.choices[0].finish_reason
+        });
+
+    } catch (error) {
+        res.status(500).send('Error processing image: ' + error.message);
+    }
+});
+
+
 module.exports = router;
 
 
