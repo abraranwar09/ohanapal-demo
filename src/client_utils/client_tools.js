@@ -41,6 +41,7 @@ async function hitProfileAPI(taskDescription, industry, additionalRequirements, 
     });
 
     if (!response.ok) {
+        processResponse(`Say the words: There was an error generating your profile. Please try again later or check your config.`, sessionId);
         throw new Error('Network response was not ok');
     }
 
@@ -71,6 +72,7 @@ async function getCalendarEvents(timePeriod, query) {
     });
 
     if (!response.ok) {
+        processResponse(`Say the words: There was an error getting your calendar events. Please try again later or check your config.`, sessionId);
         throw new Error('Network response was not ok');
     }
 
@@ -103,6 +105,7 @@ async function saveEvent(summary, location, description, start, end) {
     });
 
     if (!response.ok) {
+        processResponse(`Say the words: There was an error saving to your calendar. Please try again later or check your config.`, sessionId);
         throw new Error('Network response was not ok');
     }
 
@@ -179,6 +182,8 @@ async function cameraCapture(query) {
         output = parsedResult.output;
     } catch (error) {
         console.error(error);
+        processResponse(`Say the words: There was an error with your camera capture tool. Please try again later or check your config.`, sessionId);
+
     }
 
     //split output by the the text 'Still capture image received'
@@ -189,7 +194,7 @@ async function cameraCapture(query) {
     var parsedOutput = JSON.parse(processOutput);
     console.log(parsedOutput.message);
 
-    processResponse(`The image has been captured and processed using your camera capture tool. The response is: ${parsedOutput.message}`, sessionId);
+    processResponse(`The image has been captured and processed using your camera capture tool. The tool callresponse is: ${parsedOutput.message}`, sessionId);
 }
 
 async function processImage(base64Image, query) {
@@ -217,5 +222,42 @@ async function processImage(base64Image, query) {
     } catch (error) {
         console.error(error);
     }
+}
+
+async function executeComputerCommand(command) {
+    const piUrl = localStorage.getItem('piUrl');
+    const sessionId = localStorage.getItem('sessionId');
+
+    console.log(piUrl);
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");  
+
+
+    const raw = JSON.stringify({
+        "command": command
+    });
+
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+    };
+
+    try {
+        const response = await fetch(`${piUrl}/api/computer-control`, requestOptions);
+        const result = await response.text();
+        const parsedResult = JSON.parse(result);
+        console.log(parsedResult.result);
+
+        processResponse(`A tool call has been completed to execute a computer command. The tool call response is: ${parsedResult.result}`, sessionId);
+    } catch (error) {
+        console.error(error);
+        processResponse(`Say the words: There was an error with your computer control tool. Please try again later or check your config.`, sessionId);
+    }
+
+
+
 }
 

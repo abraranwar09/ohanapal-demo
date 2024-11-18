@@ -23,6 +23,9 @@ async function handleToolCalls(parsedResult) {
             case 'cameraCapture':
                 cameraCapture(args.query);
                 break;
+            case 'executeComputerCommand':
+                executeComputerCommand(args.command);
+                break;
             default:
                 console.warn(`Unhandled function name: ${functionName}`);
         }

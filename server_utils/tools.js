@@ -151,7 +151,24 @@ const tools = [
                 additionalProperties: false,
             },
         },
+    },
+    {
+    type: "function",
+    function: {
+      name: "executeComputerCommand",
+      description: "Executes a safe computer control command through Claude's API",
+      parameters: {
+        type: "object",
+        properties: {
+          command: {
+            type: "string",
+            description: "The command to execute (will be validated for safety)"
+          }
+        },
+        required: ["command"]
+      }
     }
+  }
 ];
 
 module.exports = tools;

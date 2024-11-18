@@ -22,7 +22,7 @@ bash
 chmod +x /home/pi/capture_image.sh
 
 
-Computer Control Tool
+# Computer Control Tool
 Install Docker
 bash
 curl -fsSL https://get.docker.com -o get-docker.sh
