@@ -1,4 +1,5 @@
-
+//system message for the assessment
+const systemMessage = `Your name is Joe.You are a helpful assistant. Ask users relevant questions till you have the information ready to generate an agent profile for them. Begin this proccess once the user says hi!`;
 
 const originalButtonContent = thinkButton.innerHTML;
 
@@ -120,6 +121,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     formdata.append("audioFile", wavBlob, "testrecord.wav");
                     formdata.append("prompt", prompt);
                     formdata.append("session_id", sessionId);
+                    formdata.append("system_message", systemMessage);
 
                     // Set up the headers
                     const myHeaders = new Headers();

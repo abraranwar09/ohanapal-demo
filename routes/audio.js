@@ -12,16 +12,19 @@ const tools = require('../server_utils/tools'); // Import the tools array
 
 const openai = new OpenAI();
 
-const systemMessage = { 
-    role: "system", 
-    content: [{ type: "text", text: `Your name is Ohana.You are a helpful assistant. Ask users relevant questions till you have the information ready to generate an agent profile for them. Begin this proccess once the user says hi!` }]
-}
+
 
 
 
 router.post('/process', upload.single('audioFile'), async (req, res) => {
-    const { prompt, session_id } = req.body;
+    const { prompt, session_id, system_message } = req.body;
     const audioFilePath = req.file.path;
+   
+    //set system message
+    const systemMessage = { 
+        role: "system", 
+        content: [{ type: "text", text: `${system_message}` }]
+    };
 
     try {
         let sessionMessage = await SessionMessage.findOne({ sessionId: session_id });
@@ -190,7 +193,14 @@ router.post('/submit-tool-call', async (req, res) => {
 });
 
 router.post('/process-text', async (req, res) => {
-    const { user_text, session_id } = req.body;
+    const { user_text, session_id, system_message } = req.body;
+
+
+    //set system message
+    const systemMessage = { 
+        role: "system", 
+        content: [{ type: "text", text: `${system_message}` }]
+    };
 
     try {
         let sessionMessage = await SessionMessage.findOne({ sessionId: session_id });
