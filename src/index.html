@@ -79,7 +79,7 @@
 
                 if (response.ok) {
                     const user = await response.json();
-                    if (user.isAssementComplete) {
+                    if (user.isAssessmentComplete) {
                         window.location.href = '/dashboard';
                     } else {
                         window.location.href = '/assessment';

@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    isAssementComplete: {
+    isAssessmentComplete: {
         type: Boolean,
         default: false
     },

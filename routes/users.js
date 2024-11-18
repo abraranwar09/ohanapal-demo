@@ -20,13 +20,13 @@ router.get('/', async (req, res) => {
 
 router.patch('/', async (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
-    const { userName, age, gender, assessmentSummary } = req.body;
+    const { userName, age, gender, assessmentSummary, isAssessmentComplete } = req.body;
 
     try {
         const decoded = jwt.verify(token, 'your_jwt_secret');
         const updatedUser = await User.findByIdAndUpdate(
             decoded.id,
-            { $set: { userName, age, gender, assessmentSummary } },
+            { $set: { userName, age, gender, assessmentSummary, isAssessmentComplete } },
             { new: true, runValidators: true, omitUndefined: true }
         );
 

@@ -18,7 +18,7 @@ async function handleToolCalls(parsedResult) {
                 saveEvent(args.summary, args.location, args.description, args.start, args.end);
                 break;
             case 'patchUserInformation':
-                patchUserInformation(args.userName, args.age, args.gender, args.assessmentSummary);
+                patchUserInformation(args.userName, args.age, args.gender, args.assessmentSummary, args.isAssessmentComplete);
                 break;
             case 'cameraCapture':
                 cameraCapture(args.query);

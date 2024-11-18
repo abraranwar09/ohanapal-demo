@@ -117,7 +117,7 @@ async function saveEvent(summary, location, description, start, end) {
 }
 
 // Function to patch user information
-async function patchUserInformation(userName, age, gender, assessmentSummary) {
+async function patchUserInformation(userName, age, gender, assessmentSummary, isAssessmentComplete) {
     const token = localStorage.getItem('token');
     const sessionId = localStorage.getItem('sessionId');
 
@@ -127,6 +127,7 @@ async function patchUserInformation(userName, age, gender, assessmentSummary) {
     if (age !== undefined) requestBody.age = age;
     if (gender !== undefined) requestBody.gender = gender;
     if (assessmentSummary !== undefined) requestBody.assessmentSummary = assessmentSummary;
+    if (isAssessmentComplete !== undefined) requestBody.isAssessmentComplete = isAssessmentComplete;
 
     try {
         const response = await fetch("http://localhost:3000/api/user", {
@@ -144,8 +145,16 @@ async function patchUserInformation(userName, age, gender, assessmentSummary) {
 
         const data = await response.json();
         console.log(data);
+        console.log('Assessment complete: ', data.isAssessmentComplete);
+        if (data.isAssessmentComplete === true) {
+            processResponse(`Say the words: The assessment is complete. Thank you for your time. We are redirecting you to the home page.`, sessionId);
 
-        processResponse(`User information has been updated successfully. Here are the updated details: ${JSON.stringify(data)}`, sessionId);
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 9000);
+        } else {
+            processResponse(`There has been a tool call to update user information. User information has been updated successfully. Here are the updated details: ${JSON.stringify(data)}. Summarise this action to the user`, sessionId);
+        }
     } catch (error) {
         console.error('Error updating user information:', error);
         processResponse('There was an error. You should say: There was an error updating the user information. Please try again later.', sessionId);
@@ -194,7 +203,7 @@ async function cameraCapture(query) {
     var parsedOutput = JSON.parse(processOutput);
     console.log(parsedOutput.message);
 
-    processResponse(`The image has been captured and processed using your camera capture tool. The tool callresponse is: ${parsedOutput.message}`, sessionId);
+    processResponse(`The image has been captured and processed using the cameraCapture tool. The tool callresponse is: ${parsedOutput.message}. Describe the response to me like I am blind.`, sessionId);
 }
 
 async function processImage(base64Image, query) {

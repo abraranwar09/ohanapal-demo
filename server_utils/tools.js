@@ -108,7 +108,7 @@ const tools = [
         type: "function",
         function: {
             name: "patchUserInformation",
-            description: "Updates/Saves new user information using optional parameters.",
+            description: "Updates/Saves new user information using optional parameters. You can use this to update the user's name, age, gender and assessment summary as needed. When assessment is complete, set isAssessmentComplete to true. Please provide all parameters for the function to work. even if they haven't changed.",
             parameters: {
                 type: "object",
                 properties: {
@@ -127,6 +127,10 @@ const tools = [
                     assessmentSummary: {
                         type: "string",
                         description: "The summary of the full assessment of the users capabilities and pain points.",
+                    },
+                    isAssessmentComplete: {
+                        type: "boolean",
+                        description: "Whether the assessment is complete or not. Only set this to true if the assessment is complete.",
                     },
                 },
                 required: [],
