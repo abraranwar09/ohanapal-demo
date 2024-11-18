@@ -2,7 +2,7 @@ const thinkButton = document.getElementById('thinkButton');
 // const originalButtonContent = thinkButton.innerHTML;
 const lottieContainer = document.getElementById('lottieContainer');
 
-async function processResponse(text, sessionId) {
+async function processResponse(text, sessionId, systemMessage) {
     //generate next text
         // Make API call to process text
         const myHeaders = new Headers();
@@ -11,7 +11,8 @@ async function processResponse(text, sessionId) {
     
         const raw = JSON.stringify({
             "session_id": sessionId,
-            "user_text": text
+            "user_text": text,
+            "system_message": systemMessage
         });
     
         const requestOptions = {

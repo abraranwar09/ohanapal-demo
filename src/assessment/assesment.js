@@ -86,6 +86,21 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     });
 
+    chatInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function sendMessage() {
+        // Change button to show loading state
+        thinkButton.innerHTML = '<div class="spinner"></div> Ohana is thinking...';
+
+        const message = chatInput.value;
+        const sessionId = localStorage.getItem('sessionId');
+        processResponse(message, sessionId, systemMessage);
+        chatInput.value = '';
+    }
 
     //function for audio processing start
     function startAudioProcessing() {
