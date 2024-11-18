@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = passwordInput.value;
 
         try {
-            const response = await fetch('/auth/signup', {
+            const response = await fetch('/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -31,14 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
-                showAlert('User created successfully', 'success');
+                showAlert('Login successful', 'success');
                 window.location.href = '/';
             } else {
                 const errorText = await response.text();
-                showAlert('Error creating user: ' + errorText, 'error');
+                showAlert('Error logging in: ' + errorText, 'error');
             }
         } catch (error) {
-            showAlert('Error creating user: ' + error.message, 'error');
+            showAlert('Error logging in: ' + error.message, 'error');
         }
     });
 
