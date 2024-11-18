@@ -15,4 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Raspberry Pi URL saved!');
         }
     });
+
+    // Add logout functionality
+    const logoutButton = document.getElementById('logout-button');
+    logoutButton.addEventListener('click', function() {
+        localStorage.clear();
+        window.location.href = '/login';
+    });
 });
