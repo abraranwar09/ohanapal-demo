@@ -130,6 +130,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     });
 
+    settingsButton.addEventListener('click', function() {
+        window.location.href = '/settings';
+    });
+
     function sendMessage() {
         // Change button to show loading state
         thinkButton.innerHTML = '<div class="spinner"></div> Ohana is thinking...';
