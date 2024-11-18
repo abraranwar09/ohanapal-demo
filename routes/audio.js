@@ -195,8 +195,7 @@ router.post('/submit-tool-call', async (req, res) => {
 router.post('/process-text', async (req, res) => {
     const { user_text, session_id, system_message } = req.body;
 
-
-    //set system message
+    // Set system message
     const systemMessage = { 
         role: "system", 
         content: [{ type: "text", text: `${system_message}` }]
@@ -236,33 +235,43 @@ router.post('/process-text', async (req, res) => {
             model: "gpt-4o-audio-preview",
             modalities: ["text", "audio"],
             audio: { voice: "alloy", format: "wav" },
-            messages: messagesWithoutId
+            messages: messagesWithoutId,
+            tools: tools
         });
 
         console.log(response.choices[0]);
 
         const finishReason = response.choices[0].finish_reason;
-        const audioData = response.choices[0].message.audio.data;
-        const transcript = response.choices[0].message.audio.transcript;
 
-        // Convert base64 audio data to a buffer
-        const audioBuffer = Buffer.from(audioData, 'base64');
+        if (finishReason === 'tool_calls') {
+            res.json({
+                finish_reason: finishReason,
+                tool_calls: response.choices[0].message.tool_calls,
+                tool_call_id: response.choices[0].message.tool_calls.id 
+            });
+        } else {
+            const audioData = response.choices[0].message.audio.data;
+            const transcript = response.choices[0].message.audio.transcript;
 
-        // Send the audio buffer, transcript, and finish reason
-        res.json({
-            audio: audioBuffer.toString('base64'), // Send as base64 if needed
-            transcript: transcript,
-            finish_reason: finishReason
-        });
+            // Convert base64 audio data to a buffer
+            const audioBuffer = Buffer.from(audioData, 'base64');
 
-        // Add the assistant's response to the session messages
-        sessionMessage.messages.push({
-            role: "assistant",
-            audio: { id: response.choices[0].message.audio.id }
-        });
+            // Send the audio buffer, transcript, and finish reason
+            res.json({
+                audio: audioBuffer.toString('base64'), // Send as base64 if needed
+                transcript: transcript,
+                finish_reason: finishReason
+            });
 
-        // Save the updated session message to the database
-        await sessionMessage.save();
+            // Add the assistant's response to the session messages
+            sessionMessage.messages.push({
+                role: "assistant",
+                audio: { id: response.choices[0].message.audio.id }
+            });
+
+            // Save the updated session message to the database
+            await sessionMessage.save();
+        }
 
     } catch (error) {
         if (!res.headersSent) {
