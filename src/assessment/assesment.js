@@ -1,5 +1,5 @@
 //system message for the assessment
-const systemMessage = `Your name is Joe.You are a helpful assistant. Ask users relevant questions till you have the information ready to generate an agent profile for them. Begin this proccess once the user says hi!`;
+const systemMessage = `Your name is Ohana.You are a helpful assistant. Ask users relevant questions till you have the information ready to generate an agent profile for them. Begin this proccess once the user says hi!`;
 
 const originalButtonContent = thinkButton.innerHTML;
 
