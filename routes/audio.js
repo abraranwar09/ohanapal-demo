@@ -66,7 +66,8 @@ router.post('/process', upload.single('audioFile'), async (req, res) => {
             modalities: ["text", "audio"],
             audio: { voice: "alloy", format: "wav" },
             messages: messagesWithoutId,
-            tools: tools
+            tools: tools,
+            tool_choice: "auto"
         });
 
         console.log(response.choices[0]);
@@ -236,7 +237,8 @@ router.post('/process-text', async (req, res) => {
             modalities: ["text", "audio"],
             audio: { voice: "alloy", format: "wav" },
             messages: messagesWithoutId,
-            tools: tools
+            tools: tools,
+            tool_choice: "auto"
         });
 
         console.log(response.choices[0]);

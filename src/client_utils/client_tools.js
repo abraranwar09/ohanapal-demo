@@ -255,18 +255,39 @@ async function executeComputerCommand(command) {
     };
 
     try {
-        const response = await fetch(`${piUrl}/api/computer-control`, requestOptions);
+        const response = await fetch(`${piUrl}/api/computer-command`, requestOptions);
         const result = await response.text();
         const parsedResult = JSON.parse(result);
         console.log(parsedResult.result);
 
-        processResponse(`A tool call has been completed to execute a computer command. The tool call response is: ${parsedResult.result}`, sessionId);
+        processResponse(`A tool call has been completed to execute a computer command. These are the results: ${parsedResult.result}. You may need this information to provide answers to the users previous questions or to complete another task.`, sessionId);
     } catch (error) {
         console.error(error);
         processResponse(`Say the words: There was an error with your computer control tool. Please try again later or check your config.`, sessionId);
     }
+}
 
-
-
+//tool to get the user's location
+async function getUserLocation() {
+    const sessionId = localStorage.getItem('sessionId');
+    
+    try {
+        // First get the IP address
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        if (!ipResponse.ok) throw new Error('Failed to get IP address');
+        const ipData = await ipResponse.json();
+        
+        // Then get location data using the IP
+        const locationResponse = await fetch(`http://localhost:3000/location?ipAddress=${ipData.ip}`);
+        if (!locationResponse.ok) throw new Error('Failed to get location data');
+        const locationData = await locationResponse.json();
+        
+        processResponse(`A tool call has been completed to get your location. The response is: ${JSON.stringify(locationData)}. You may need this information to provide answers to the users previous questions or to complete another task.`, sessionId);
+        return locationData;
+    } catch (error) {
+        console.error('Error getting location:', error);
+        processResponse(`Say the words: There was an error getting your location. Please try again later.`, sessionId);
+        throw error;
+    }
 }
 

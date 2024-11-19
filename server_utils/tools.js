@@ -157,22 +157,35 @@ const tools = [
         },
     },
     {
-    type: "function",
-    function: {
-      name: "executeComputerCommand",
-      description: "Executes a safe computer control command through Claude's API",
-      parameters: {
-        type: "object",
-        properties: {
-          command: {
-            type: "string",
-            description: "The command to execute (will be validated for safety)"
-          }
+        type: "function",
+        function: {
+            name: "executeComputerCommand",
+            description: "Executes a safe computer control command through Claude's API",
+            parameters: {
+                type: "object",
+                properties: {
+                    command: {
+                        type: "string",
+                        description: "The command to execute (will be validated for safety)"
+                    }
+                },
+                required: ["command"]
+            }
+        }
+    },
+    {
+        type: "function",
+        function: {
+            name: "getUserLocation",
+            description: "Allows you to get detailed information about the user's locale, timezone, exact latitude and longitude, city, region, and more.",
+            parameters: {
+                type: "object",
+                properties: {},
+                required: [],
+                additionalProperties: false,
+            },
         },
-        required: ["command"]
-      }
     }
-  }
 ];
 
 module.exports = tools;

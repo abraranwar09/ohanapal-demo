@@ -26,6 +26,9 @@ async function handleToolCalls(parsedResult) {
             case 'executeComputerCommand':
                 executeComputerCommand(args.command);
                 break;
+            case 'getUserLocation':
+                getUserLocation();
+                break;
             default:
                 console.warn(`Unhandled function name: ${functionName}`);
         }
