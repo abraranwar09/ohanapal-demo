@@ -78,6 +78,7 @@ router.post('/process', upload.single('audioFile'), async (req, res) => {
             res.json({
                 finish_reason: finishReason,
                 tool_calls: response.choices[0].message.tool_calls,
+                tool_call_message: response.choices[0].message,
                 tool_call_id: response.choices[0].message.tool_calls.id 
             });
         } else {
@@ -117,16 +118,14 @@ router.post('/process', upload.single('audioFile'), async (req, res) => {
 
 
 router.post('/submit-tool-call', async (req, res) => {
-    const { session_id, tool_call_id, tool_call_results } = req.body;
+    const { tool_call_id, tool_call_message, tool_call_results, session_id } = req.body;
 
     try {
-        // Retrieve previous messages using session_id
         let sessionMessage = await SessionMessage.findOne({ sessionId: session_id });
         if (!sessionMessage) {
             return res.status(404).send('Session not found');
         }
 
-        // Remove _id fields from messages
         const removeIdFields = (obj) => {
             if (Array.isArray(obj)) {
                 return obj.map(removeIdFields);
@@ -142,17 +141,30 @@ router.post('/submit-tool-call', async (req, res) => {
 
         const messagesWithoutId = sessionMessage.messages.map(message => removeIdFields(message.toObject()));
 
-        // Add the tool call result to the messages array
-        const function_call_result_message = {
-            role: "tool",
-            content: [
-                { type: "text", text: tool_call_results }
-            ],
-            tool_call_id: tool_call_id
-        };
-        messagesWithoutId.push(function_call_result_message);
+        messagesWithoutId.push(tool_call_message);
 
-        // Generate an audio response
+         //push tool call message and tool call results to the session messages
+ 
+         sessionMessage.messages.push({
+             role: "assistant",
+             content: [{
+                 type: "text",
+                 text: 'You have used the tool: ' + tool_call_message.tool_calls[0].function.name + '. These are your tool call results: ' + JSON.stringify(tool_call_results)
+             }],
+             tool_call_id: tool_call_id
+         });
+ 
+         await sessionMessage.save();
+
+        messagesWithoutId.push({
+            role: "tool",
+            content: [{
+                type: "text",
+                text: JSON.stringify(tool_call_results)
+            }],
+            tool_call_id: tool_call_id
+        });
+
         const response = await openai.chat.completions.create({
             model: "gpt-4o-audio-preview",
             modalities: ["text", "audio"],
@@ -166,21 +178,14 @@ router.post('/submit-tool-call', async (req, res) => {
         const audioData = response.choices[0].message.audio.data;
         const transcript = response.choices[0].message.audio.transcript;
 
-        // Convert base64 audio data to a buffer
         const audioBuffer = Buffer.from(audioData, 'base64');
 
-        // Set headers for the response
-        res.setHeader('Content-Type', 'audio/wav');
-        res.setHeader('Content-Disposition', 'attachment; filename="response.wav"');
-
-        // Send the audio buffer, transcript, and finish reason
         res.json({
-            audio: audioBuffer.toString('base64'), // Send as base64 if needed
+            audio: audioBuffer.toString('base64'),
             transcript: transcript,
             finish_reason: finishReason
         });
-
-        // Save the new message to the session
+       
         sessionMessage.messages.push({
             role: "assistant",
             audio: { id: response.choices[0].message.audio.id }
@@ -249,6 +254,7 @@ router.post('/process-text', async (req, res) => {
             res.json({
                 finish_reason: finishReason,
                 tool_calls: response.choices[0].message.tool_calls,
+                tool_call_message: response.choices[0].message,
                 tool_call_id: response.choices[0].message.tool_calls.id 
             });
         } else {

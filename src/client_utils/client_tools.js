@@ -1,5 +1,5 @@
 //tool function for google search
-async function openGoogle(query, toolCallId) {
+async function openGoogle(query, toolCallId, toolCallMessage) {
     console.log(query);
     // Open new tab with Google search
     window.open(`https://www.google.com/search?q=${query}`, '_blank');
@@ -7,17 +7,27 @@ async function openGoogle(query, toolCallId) {
 
     const sessionId = localStorage.getItem('sessionId');
 
-    processResponse(`A tool call has been done. We dont need to submit the response. Only say the following words with no alteration: I have opened a new tab with the Google search results for ${query}`, sessionId);
+    const toolCallResults = {
+        "status": "success",
+        "message": `Google search completed for ${query}`
+    };
+
+    submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+    // processResponse(`A tool call has been done. We dont need to submit the response. Only say the following words with no alteration: I have opened a new tab with the Google search results for ${query}`, sessionId);
 }
 
 //tool function for profile generation
-async function generateProfile(taskDescription, industry, additionalRequirements, model) {
+async function generateProfile(taskDescription, industry, additionalRequirements, model, toolCallId, toolCallMessage) {
     const lottieContainer = document.getElementById('lottieContainer');
     const sessionId = localStorage.getItem('sessionId');
     const profileResponse = await hitProfileAPI(taskDescription, industry, additionalRequirements, model);
     console.log(profileResponse);
 
-    processResponse(`say the words: Your profile for ${industry} has been created to do the following task: ${taskDescription}.`, sessionId);
+    const toolCallResults = profileResponse;
+
+    submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+
+    // processResponse(`say the words: Your profile for ${industry} has been created to do the following task: ${taskDescription}.`, sessionId);
 }
 
 
@@ -51,7 +61,7 @@ async function hitProfileAPI(taskDescription, industry, additionalRequirements, 
 }
 
 // Function to get calendar events
-async function getCalendarEvents(timePeriod, query) {
+async function getCalendarEvents(timePeriod, query, toolCallId, toolCallMessage) {
     const accessToken = localStorage.getItem('accessToken');
     const calendarId = localStorage.getItem('userEmail');
     const sessionId = localStorage.getItem('sessionId');
@@ -79,11 +89,14 @@ async function getCalendarEvents(timePeriod, query) {
     const data = await response.json();
     console.log(data);
 
-    processResponse(`A tool call has been completed using your getCalendarEvents tool. This is the tool call response containing the events from the past ${timePeriod}: ${JSON.stringify(data)}. Today's date is ${formattedToday}. The user's query is: ${query}. You do not have to specifically output all data. Remember to optimize your sentence to be spoken out loud.`, sessionId);
+    const toolCallResults = data;
+
+    submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+    // processResponse(`A tool call has been completed using your getCalendarEvents tool. This is the tool call response containing the events from the past ${timePeriod}: ${JSON.stringify(data)}. Today's date is ${formattedToday}. The user's query is: ${query}. You do not have to specifically output all data. Remember to optimize your sentence to be spoken out loud.`, sessionId);
 }
 
 // Function to save a calendar event
-async function saveEvent(summary, location, description, start, end) {
+async function saveEvent(summary, location, description, start, end, toolCallId, toolCallMessage) {
     const accessToken = localStorage.getItem('accessToken');
     const calendarId = localStorage.getItem('userEmail');
     const sessionId = localStorage.getItem('sessionId');
@@ -112,7 +125,10 @@ async function saveEvent(summary, location, description, start, end) {
     const data = await response.json();
     console.log(data);
 
-    processResponse(`A tool call has been completed to save an event to the calendar. The response is: ${JSON.stringify(data)}. Say to the user: Your event has been saved to the calendar. You do not have to specifically output all data but mention the name, date and start time. Remember to optimize your sentence to be spoken out loud.`, sessionId);
+    const toolCallResults = data;
+
+    submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+    // processResponse(`A tool call has been completed to save an event to the calendar. The response is: ${JSON.stringify(data)}. Say to the user: Your event has been saved to the calendar. You do not have to specifically output all data but mention the name, date and start time. Remember to optimize your sentence to be spoken out loud.`, sessionId);
 
 }
 

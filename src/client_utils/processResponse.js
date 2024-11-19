@@ -1,4 +1,3 @@
-
 const thinkButton = document.getElementById('thinkButton');
 // const originalButtonContent = thinkButton.innerHTML;
 const lottieContainer = document.getElementById('lottieContainer');
@@ -74,3 +73,79 @@ async function processResponse(text, sessionId, systemMessage) {
             })
             .catch((error) => console.error(error));
 }
+
+async function submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults) {
+    try {
+        const response = await fetch("http://localhost:3000/api/audio/submit-tool-call", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                session_id: sessionId,
+                tool_call_id: toolCallId,
+                tool_call_message: toolCallMessage,
+                tool_call_results: toolCallResults
+            })
+        });
+
+        // Add check for response status
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Server error (${response.status}): ${errorText}`);
+        }
+
+        // Try to parse JSON response
+        let parsedResult;
+        try {
+            parsedResult = await response.json();
+        } catch (parseError) {
+            const responseText = await response.text();
+            throw new Error(`Failed to parse JSON response: ${responseText}`);
+        }
+
+        // Handle audio if present
+        if (parsedResult.audio) {
+            const audioData = parsedResult.audio;
+            const audio = new Audio(`data:audio/wav;base64,${audioData}`);
+            
+            const lottieAnimation = lottie.loadAnimation({
+                container: lottieContainer,
+                renderer: 'svg',
+                loop: true,
+                autoplay: false,
+                path: '../assets/ai-response.json'
+            });
+        
+            lottieContainer.style.display = 'block';
+            lottieAnimation.play();
+
+            audio.play();
+            audio.onended = () => {
+                lottieContainer.style.display = 'none';
+                lottieAnimation.stop();
+            };
+            
+            // Display the transcript
+            const transcript = parsedResult.transcript;
+            console.log('Transcript:', transcript);
+            document.getElementById('aiMessage').innerHTML = `<span class="tlt">${transcript}</span>`;
+
+            $('.tlt').textillate({
+                in: {
+                    delayScale: 1
+                }
+            });
+
+            // Revert button to original state
+            thinkButton.innerHTML = originalButtonContent;
+        }
+
+        // return parsedResult;
+    } catch (error) {
+        console.error('Error in submitToolCall:', error);
+        throw error;
+    }
+}
+
+

@@ -6,19 +6,19 @@ async function handleToolCalls(parsedResult) {
 
         switch (functionName) {
             case 'openGoogle':
-                openGoogle(args.query, parsedResult.tool_calls[0].id);
+                openGoogle(args.query, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
                 break;
             case 'generateProfile':
-                generateProfile(args.taskDescription, args.industry, args.additionalRequirements, args.model);
+                generateProfile(args.taskDescription, args.industry, args.additionalRequirements, args.model, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
                 break;
             case 'getCalendarEvents':
-                getCalendarEvents(args.timePeriod, args.query);
+                getCalendarEvents(args.timePeriod, args.query, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
                 break;
             case 'saveEvent':
-                saveEvent(args.summary, args.location, args.description, args.start, args.end);
+                saveEvent(args.summary, args.location, args.description, args.start, args.end, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
                 break;
             case 'patchUserInformation':
-                patchUserInformation(args.userName, args.age, args.gender, args.assessmentSummary, args.isAssessmentComplete);
+                patchUserInformation(args.userName, args.age, args.gender, args.assessmentSummary, args.isAssessmentComplete, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
                 break;
             case 'cameraCapture':
                 cameraCapture(args.query);
