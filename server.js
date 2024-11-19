@@ -55,13 +55,14 @@ const userRoutes = require('./routes/users');
 const audioRoutes = require('./routes/audio');
 const calendarRoutes = require('./routes/calendar');
 const locationRoutes = require('./routes/location');
-
+const perplexityRoutes = require('./routes/perplexity');
 // Use the routes
 app.use('/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/audio', audioRoutes);
 app.use('/calendar', calendarRoutes);
 app.use('/location', locationRoutes);
+app.use('/perplexity', perplexityRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

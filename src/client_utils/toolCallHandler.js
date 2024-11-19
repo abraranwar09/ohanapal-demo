@@ -21,13 +21,16 @@ async function handleToolCalls(parsedResult) {
                 patchUserInformation(args.userName, args.age, args.gender, args.assessmentSummary, args.isAssessmentComplete, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
                 break;
             case 'cameraCapture':
-                cameraCapture(args.query);
+                cameraCapture(args.query, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
                 break;
             case 'executeComputerCommand':
-                executeComputerCommand(args.command);
+                executeComputerCommand(args.command, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
                 break;
             case 'getUserLocation':
-                getUserLocation();
+                getUserLocation(parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
+                break;
+            case 'usePerplexity':
+                usePerplexity(args.query, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
                 break;
             default:
                 console.warn(`Unhandled function name: ${functionName}`);

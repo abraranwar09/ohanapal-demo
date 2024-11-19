@@ -27,6 +27,11 @@ Available Functions:
     -  function to open the browser and perform a Google search
     - Can be used to perform a Google search
     - Uses parameters: query
+    -do not use this tool unless the user asks you to open google. this is not a web search tool
+7. usePerplexity (usePerplexity)
+    - function to search for information on the web using Perplexity AI
+    - Can be used to search for information on the web
+    - Uses parameters: query
 Guidelines:
 - Combine tools when needed for comprehensive responses
 - Always provide clear explanations of tool usage
@@ -68,6 +73,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     //initialize a variable for session id
     const sessionId = "session_" + Date.now();
     localStorage.setItem('sessionId', sessionId);
+
+    // processResponse("Say the words: Click the button and say hi to get started!", sessionId, systemMessage);
 
 
     //get todays date and time and format it        

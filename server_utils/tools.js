@@ -3,7 +3,7 @@ const tools = [
         type: "function",
         function: {
             name: "openGoogle",
-            description: "Open the browser and perform a Google search based on the user's query.",
+            description: "Open the browser and perform a Google search based on the user's query. do not use this tool unless the user asks you to open google. this is not a web search tool",
             parameters: {
                 type: "object",
                 properties: {
@@ -185,7 +185,25 @@ const tools = [
                 additionalProperties: false,
             },
         },
-    }
+    },
+    {
+        type: "function",
+        function: {
+            name: "usePerplexity",
+            description: "Search for information on the web using Perplexity AI. Whenever asked to search the web, use this tool.",
+            parameters: {
+                type: "object",
+                properties: {
+                    query: {
+                        type: "string",
+                        description: "The search query to look up using Perplexity.",
+                    },
+                },
+                required: ["query"],
+                additionalProperties: false,
+            },
+        },
+    },
 ];
 
 module.exports = tools;

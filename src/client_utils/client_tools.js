@@ -133,7 +133,7 @@ async function saveEvent(summary, location, description, start, end, toolCallId,
 }
 
 // Function to patch user information
-async function patchUserInformation(userName, age, gender, assessmentSummary, isAssessmentComplete) {
+async function patchUserInformation(userName, age, gender, assessmentSummary, isAssessmentComplete, toolCallId, toolCallMessage) {
     const token = localStorage.getItem('token');
     const sessionId = localStorage.getItem('sessionId');
 
@@ -163,13 +163,19 @@ async function patchUserInformation(userName, age, gender, assessmentSummary, is
         console.log(data);
         console.log('Assessment complete: ', data.isAssessmentComplete);
         if (data.isAssessmentComplete === true) {
-            processResponse(`Say the words: The assessment is complete. Thank you for your time. We are redirecting you to the home page.`, sessionId);
+            const toolCallResults = data;
+
+            submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+            // processResponse(`Say the words: The assessment is complete. Thank you for your time. We are redirecting you to the home page.`, sessionId);
 
             setTimeout(() => {
                 window.location.href = '/dashboard';
             }, 9000);
         } else {
-            processResponse(`There has been a tool call to update user information. User information has been updated successfully. Here are the updated details: ${JSON.stringify(data)}. Summarise this action to the user`, sessionId);
+            const toolCallResults = data;
+
+            submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);    
+            // processResponse(`There has been a tool call to update user information. User information has been updated successfully. Here are the updated details: ${JSON.stringify(data)}. Summarise this action to the user`, sessionId);
         }
     } catch (error) {
         console.error('Error updating user information:', error);
@@ -178,7 +184,7 @@ async function patchUserInformation(userName, age, gender, assessmentSummary, is
 }
 
 // tool to capture image from users raspberry pi
-async function cameraCapture(query) {
+async function cameraCapture(query, toolCallId, toolCallMessage) {
     const piUrl = localStorage.getItem('piUrl');
     const sessionId = localStorage.getItem('sessionId');
     console.log(piUrl);
@@ -219,7 +225,10 @@ async function cameraCapture(query) {
     var parsedOutput = JSON.parse(processOutput);
     console.log(parsedOutput.message);
 
-    processResponse(`The image has been captured and processed using the cameraCapture tool. The tool callresponse is: ${parsedOutput.message}. Describe the response to me like I am blind.`, sessionId);
+    const toolCallResults = parsedOutput;
+
+    submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+    // processResponse(`The image has been captured and processed using the cameraCapture tool. The tool callresponse is: ${parsedOutput.message}. Describe the response to me like I am blind.`, sessionId);
 }
 
 async function processImage(base64Image, query) {
@@ -249,7 +258,7 @@ async function processImage(base64Image, query) {
     }
 }
 
-async function executeComputerCommand(command) {
+async function executeComputerCommand(command, toolCallId, toolCallMessage) {
     const piUrl = localStorage.getItem('piUrl');
     const sessionId = localStorage.getItem('sessionId');
 
@@ -276,7 +285,10 @@ async function executeComputerCommand(command) {
         const parsedResult = JSON.parse(result);
         console.log(parsedResult.result);
 
-        processResponse(`A tool call has been completed to execute a computer command. These are the results: ${parsedResult.result}. You may need this information to provide answers to the users previous questions or to complete another task.`, sessionId);
+        const toolCallResults = parsedResult;
+
+        submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+        // processResponse(`A tool call has been completed to execute a computer command. These are the results: ${parsedResult.result}. You may need this information to provide answers to the users previous questions or to complete another task.`, sessionId);
     } catch (error) {
         console.error(error);
         processResponse(`Say the words: There was an error with your computer control tool. Please try again later or check your config.`, sessionId);
@@ -284,7 +296,7 @@ async function executeComputerCommand(command) {
 }
 
 //tool to get the user's location
-async function getUserLocation() {
+async function getUserLocation(toolCallId, toolCallMessage) {
     const sessionId = localStorage.getItem('sessionId');
     
     try {
@@ -298,12 +310,35 @@ async function getUserLocation() {
         if (!locationResponse.ok) throw new Error('Failed to get location data');
         const locationData = await locationResponse.json();
         
-        processResponse(`A tool call has been completed to get your location. The response is: ${JSON.stringify(locationData)}. You may need this information to provide answers to the users previous questions or to complete another task.`, sessionId);
+        const toolCallResults = locationData;
+
+        submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+        // processResponse(`A tool call has been completed to get your location. The response is: ${JSON.stringify(locationData)}. You may need this information to provide answers to the users previous questions or to complete another task.`, sessionId);
         return locationData;
     } catch (error) {
         console.error('Error getting location:', error);
         processResponse(`Say the words: There was an error getting your location. Please try again later.`, sessionId);
         throw error;
     }
+}
+
+//tool to use perplexity
+async function usePerplexity(query, toolCallId, toolCallMessage) {
+    const sessionId = localStorage.getItem('sessionId');
+
+    const response = await fetch("http://localhost:3000/perplexity/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: query })
+    });
+
+    const data = await response.json();
+    console.log(data);  
+
+    const toolCallResults = data;
+
+    submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
 }
 
