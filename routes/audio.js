@@ -123,7 +123,16 @@ router.post('/submit-tool-call', async (req, res) => {
     try {
         let sessionMessage = await SessionMessage.findOne({ sessionId: session_id });
         if (!sessionMessage) {
-            return res.status(404).send('Session not found');
+            // return res.status(404).send('Session not found');
+            sessionMessage = new SessionMessage({ 
+                role: "assistant",
+                content: [{
+                    type: "text",
+                    text: 'You have used the tool: ' + tool_call_message.tool_calls[0].function.name + '. These are your tool call results: ' + JSON.stringify(tool_call_results)
+                }],
+                tool_call_id: tool_call_id   
+            });
+            
         }
 
         const removeIdFields = (obj) => {
