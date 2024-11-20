@@ -22,7 +22,7 @@ async function processResponse(text, sessionId, systemMessage) {
             redirect: "follow"
         };
     
-        fetch("http://localhost:3000/api/audio/process-text", requestOptions)
+        fetch("/api/audio/process-text", requestOptions)
             .then((response) => response.text())
             .then((result) => {
                 console.log(result);
@@ -76,7 +76,7 @@ async function processResponse(text, sessionId, systemMessage) {
 
 async function submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults) {
     try {
-        const response = await fetch("http://localhost:3000/api/audio/submit-tool-call", {
+        const response = await fetch("/api/audio/submit-tool-call", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

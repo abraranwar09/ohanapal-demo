@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     //make an api call to get user information and check if the user has a userName
     const token = localStorage.getItem('token');
-    const response = await fetch("http://localhost:3000/api/user", {
+    const response = await fetch("/api/user", {
         headers: {
             "Authorization": `Bearer ${token}`
         }
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     };
 
                     // Send the request
-                    fetch("http://localhost:3000/api/audio/process", requestOptions)
+                    fetch("/api/audio/process", requestOptions)
                         .then(response => response.text())
                         .then(async result => {
                             const parsedResult = JSON.parse(result);

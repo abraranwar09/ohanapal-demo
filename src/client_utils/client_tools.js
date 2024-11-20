@@ -69,7 +69,7 @@ async function getCalendarEvents(timePeriod, query, toolCallId, toolCallMessage)
     //get todays date
     const today = new Date();
     const formattedToday = today.toISOString().split('T')[0];
-    const response = await fetch("http://localhost:3000/google/calendar/events", {
+    const response = await fetch("/google/calendar/events", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -101,7 +101,7 @@ async function saveEvent(summary, location, description, start, end, toolCallId,
     const calendarId = localStorage.getItem('userEmail');
     const sessionId = localStorage.getItem('sessionId');
 
-    const response = await fetch("http://localhost:3000/google/calendar/save-event", {
+    const response = await fetch("/google/calendar/save-event", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -146,7 +146,7 @@ async function patchUserInformation(userName, age, gender, assessmentSummary, is
     if (isAssessmentComplete !== undefined) requestBody.isAssessmentComplete = isAssessmentComplete;
 
     try {
-        const response = await fetch("http://localhost:3000/api/user", {
+        const response = await fetch("/api/user", {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -249,7 +249,7 @@ async function processImage(base64Image, query) {
     };
 
     try {
-        const response = await fetch("http://localhost:3000/api/audio/process-image", requestOptions);
+        const response = await fetch("/api/audio/process-image", requestOptions);
         const result = await response.text();
         // console.log(result);
         return result;
@@ -306,7 +306,7 @@ async function getUserLocation(toolCallId, toolCallMessage) {
         const ipData = await ipResponse.json();
         
         // Then get location data using the IP
-        const locationResponse = await fetch(`http://localhost:3000/location?ipAddress=${ipData.ip}`);
+        const locationResponse = await fetch(`/location?ipAddress=${ipData.ip}`);
         if (!locationResponse.ok) throw new Error('Failed to get location data');
         const locationData = await locationResponse.json();
         
@@ -326,7 +326,7 @@ async function getUserLocation(toolCallId, toolCallMessage) {
 async function usePerplexity(query, toolCallId, toolCallMessage) {
     const sessionId = localStorage.getItem('sessionId');
 
-    const response = await fetch("http://localhost:3000/perplexity/chat", {
+    const response = await fetch("/perplexity/chat", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -348,7 +348,7 @@ async function listGmailMessages(maxResults, query, toolCallId, toolCallMessage)
     const sessionId = localStorage.getItem('sessionId');
 
     try {
-        const response = await fetch("http://localhost:3000/google/gmail/messages", {
+        const response = await fetch("/google/gmail/messages", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -383,7 +383,7 @@ async function getGmailMessage(messageId, toolCallId, toolCallMessage) {
     const sessionId = localStorage.getItem('sessionId');
 
     try {
-        const response = await fetch(`http://localhost:3000/google/gmail/message/${messageId}`, {
+        const response = await fetch(`/google/gmail/message/${messageId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -413,7 +413,7 @@ async function sendGmailMessage(to, subject, body, cc, bcc, isHtml, toolCallId, 
     const sessionId = localStorage.getItem('sessionId');
 
     try {
-        const response = await fetch("http://localhost:3000/google/gmail/send", {
+        const response = await fetch("/google/gmail/send", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
