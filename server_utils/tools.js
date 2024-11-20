@@ -2,54 +2,6 @@ const tools = [
     {
         type: "function",
         function: {
-            name: "openGoogle",
-            description: "Open the browser and perform a Google search based on the user's query. do not use this tool unless the user asks you to open google. this is not a web search tool",
-            parameters: {
-                type: "object",
-                properties: {
-                    query: {
-                        type: "string",
-                        description: "The search query to be used in Google search.",
-                    },
-                },
-                required: ["query"],
-                additionalProperties: false,
-            },
-        },
-    },
-    {
-        type: "function",
-        function: {
-            name: "generateProfile",
-            description: "This function can generate a specific agent profile for you based on the parameters.",
-            parameters: {
-                type: "object",
-                properties: {
-                    taskDescription: {
-                        type: "string",
-                        description: "Describe the tasks you want to accomplish with AI.",
-                    },
-                    industry: {
-                        type: "string",
-                        description: "What industry is this applicable for.",
-                    },
-                    additionalRequirements: {
-                        type: "string",
-                        description: "Any extra requirements the user has of the AI.",
-                    },
-                    model: {
-                        type: "string",
-                        description: "The AI model used to generate the profile.",
-                    },
-                },
-                required: ["taskDescription", "industry", "additionalRequirements", "model"],
-                additionalProperties: false,
-            },
-        },
-    },
-    {
-        type: "function",
-        function: {
             name: "getCalendarEvents",
             description: "You can use the Google API to fetch the user's events based on time period.",
             parameters: {
@@ -104,40 +56,40 @@ const tools = [
             },
         },
     },
-    {
-        type: "function",
-        function: {
-            name: "patchUserInformation",
-            description: "Updates/Saves new user information using optional parameters. You can use this to update the user's name, age, gender and assessment summary as needed. When assessment is complete, set isAssessmentComplete to true. Please provide all parameters for the function to work. even if they haven't changed.",
-            parameters: {
-                type: "object",
-                properties: {
-                    userName: {
-                        type: "string",
-                        description: "New user name.",
-                    },
-                    age: {
-                        type: "integer",
-                        description: "The users age.",
-                    },
-                    gender: {
-                        type: "string",
-                        description: "The user's gender.",
-                    },
-                    assessmentSummary: {
-                        type: "string",
-                        description: "The summary of the full assessment of the users capabilities and pain points.",
-                    },
-                    isAssessmentComplete: {
-                        type: "boolean",
-                        description: "Whether the assessment is complete or not. Only set this to true if the assessment is complete.",
-                    },
-                },
-                required: [],
-                additionalProperties: false,
-            },
-        },
-    },
+    // {
+    //     type: "function",
+    //     function: {
+    //         name: "patchUserInformation",
+    //         description: "Updates/Saves new user information using optional parameters. You can use this to update the user's name, age, gender and assessment summary as needed. When assessment is complete, set isAssessmentComplete to true. Please provide all parameters for the function to work. even if they haven't changed.",
+    //         parameters: {
+    //             type: "object",
+    //             properties: {
+    //                 userName: {
+    //                     type: "string",
+    //                     description: "New user name.",
+    //                 },
+    //                 age: {
+    //                     type: "integer",
+    //                     description: "The users age.",
+    //                 },
+    //                 gender: {
+    //                     type: "string",
+    //                     description: "The user's gender.",
+    //                 },
+    //                 assessmentSummary: {
+    //                     type: "string",
+    //                     description: "The summary of the full assessment of the users capabilities and pain points.",
+    //                 },
+    //                 isAssessmentComplete: {
+    //                     type: "boolean",
+    //                     description: "Whether the assessment is complete or not. Only set this to true if the assessment is complete.",
+    //                 },
+    //             },
+    //             required: [],
+    //             additionalProperties: false,
+    //         },
+    //     },
+    // },
     {
         type: "function",
         function: {
@@ -200,6 +152,84 @@ const tools = [
                     },
                 },
                 required: ["query"],
+                additionalProperties: false,
+            },
+        },
+    },
+    {
+        type: "function",
+        function: {
+            name: "listGmailMessages",
+            description: "Fetches a list of Gmail messages based on the specified query parameters.",
+            parameters: {
+                type: "object",
+                properties: {
+                    // query: {
+                    //     type: "string",
+                    //     description: "The search query to filter Gmail messages.",
+                    // },
+                    maxResults: {
+                        type: "integer",
+                        description: "The maximum number of messages to retrieve.",
+                    }
+                },
+                required: ["query"],
+                additionalProperties: false,
+            },
+        },
+    },
+    {
+        type: "function",
+        function: {
+            name: "getGmailMessage",
+            description: "Fetches details of a specific Gmail message using its messageId. Use this tool only when the user provides a messageId and explicitly asks for Gmail message details.",
+            parameters: {
+                type: "object",
+                properties: {
+                    messageId: {
+                        type: "string",
+                        description: "The ID of the Gmail message to retrieve.",
+                    },
+                },
+                required: ["messageId"],
+                additionalProperties: false,
+            },
+        },
+    },
+    {
+        type: "function",
+        function: {
+            name: "sendGmailMessage",
+            description: "Sends an email through Gmail with the specified parameters.",
+            parameters: {
+                type: "object",
+                properties: {
+                    to: {
+                        type: "string",
+                        description: "Email address of the recipient.",
+                    },
+                    subject: {
+                        type: "string",
+                        description: "Subject line of the email.",
+                    },
+                    body: {
+                        type: "string",
+                        description: "Content of the email message.",
+                    },
+                    cc: {
+                        type: "string",
+                        description: "Email addresses to CC (comma-separated). Send empty string if not needed.",
+                    },
+                    bcc: {
+                        type: "string",
+                        description: "Email addresses to BCC (comma-separated). Send empty string if not needed.",
+                    },
+                    isHtml: {
+                        type: "boolean",
+                        description: "Whether the email body contains HTML formatting. Send false if not needed.",
+                    },
+                },
+                required: ["to", "subject", "body"],
                 additionalProperties: false,
             },
         },

@@ -44,6 +44,9 @@
     if (params.accessToken) {
         localStorage.setItem('accessToken', params.accessToken);
     }
+    if (params.refreshToken) {
+        localStorage.setItem('refreshToken', params.refreshToken);
+    }
     // Optionally, remove the token and accessToken from the URL
     if (params.token || params.accessToken) {
         window.history.replaceState({}, document.title, window.location.pathname);

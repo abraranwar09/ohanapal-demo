@@ -10,23 +10,29 @@ passport.use(new GoogleStrategy({
 },
   async (accessToken, refreshToken, profile, done) => {
     try {
-      // Check if user already exists in our db
+      // Find or create user
       let user = await User.findOne({ googleId: profile.id });
-      if (user) {
-        user.accessToken = accessToken;
-        await user.save();
-        done(null, user);
-      } else {
-        // If not, create a new user in our db
-        user = await new User({
+      
+      if (!user) {
+        user = await User.create({
           googleId: profile.id,
           email: profile.emails[0].value,
-          accessToken: accessToken
-        }).save();
-        done(null, user);
+          name: profile.displayName,
+          accessToken: accessToken,
+          refreshToken: refreshToken  // Save the refresh token
+        });
+      } else {
+        // Update tokens even if user exists
+        user.accessToken = accessToken;
+        if (refreshToken) {  // refreshToken isn't always provided if user has already granted permission
+          user.refreshToken = refreshToken;
+        }
+        await user.save();
       }
-    } catch (err) {
-      done(err, null);
+      
+      return done(null, user);
+    } catch (error) {
+      return done(error, null);
     }
   }
 ));

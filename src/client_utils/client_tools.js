@@ -69,7 +69,7 @@ async function getCalendarEvents(timePeriod, query, toolCallId, toolCallMessage)
     //get todays date
     const today = new Date();
     const formattedToday = today.toISOString().split('T')[0];
-    const response = await fetch("http://localhost:3000/calendar/events", {
+    const response = await fetch("http://localhost:3000/google/calendar/events", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -101,7 +101,7 @@ async function saveEvent(summary, location, description, start, end, toolCallId,
     const calendarId = localStorage.getItem('userEmail');
     const sessionId = localStorage.getItem('sessionId');
 
-    const response = await fetch("http://localhost:3000/calendar/save-event", {
+    const response = await fetch("http://localhost:3000/google/calendar/save-event", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -341,4 +341,107 @@ async function usePerplexity(query, toolCallId, toolCallMessage) {
 
     submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
 }
+
+// Function to list Gmail messages
+async function listGmailMessages(maxResults, query, toolCallId, toolCallMessage) {
+    const accessToken = localStorage.getItem('accessToken');
+    const sessionId = localStorage.getItem('sessionId');
+
+    try {
+        const response = await fetch("http://localhost:3000/google/gmail/messages", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                accessToken,
+                maxResults,
+                query
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log(data);
+        const toolCallResults = {
+            "emails": data
+        };
+
+        submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+    } catch (error) {
+        console.error('Error fetching emails:', error);
+        processResponse(`Say the words: There was an error fetching your emails. Please try again later.`, sessionId);
+    }
+}
+
+// Function to get specific Gmail message details
+async function getGmailMessage(messageId, toolCallId, toolCallMessage) {
+    const accessToken = localStorage.getItem('accessToken');
+    const sessionId = localStorage.getItem('sessionId');
+
+    try {
+        const response = await fetch(`http://localhost:3000/google/gmail/message/${messageId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                accessToken
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        const toolCallResults = data;
+
+        submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+    } catch (error) {
+        console.error('Error fetching email details:', error);
+        processResponse(`Say the words: There was an error fetching the email details. Please try again later.`, sessionId);
+    }
+}
+
+// Function to send Gmail message
+async function sendGmailMessage(to, subject, body, cc, bcc, isHtml, toolCallId, toolCallMessage) {
+    const accessToken = localStorage.getItem('accessToken');
+    const sessionId = localStorage.getItem('sessionId');
+
+    try {
+        const response = await fetch("http://localhost:3000/google/gmail/send", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                accessToken: accessToken,
+                to: to,
+                subject: subject,
+                body: body,
+                // cc: cc,
+                // bcc: bcc,
+                isHtml: isHtml
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        const toolCallResults = data;
+
+        submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+    } catch (error) {
+        console.error('Error sending email:', error);
+        processResponse(`Say the words: There was an error sending your email. Please try again later.`, sessionId);
+    }
+}
+
+
 

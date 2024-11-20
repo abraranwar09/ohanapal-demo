@@ -32,6 +32,15 @@ async function handleToolCalls(parsedResult) {
             case 'usePerplexity':
                 usePerplexity(args.query, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
                 break;
+            case 'listGmailMessages':
+                listGmailMessages(args.maxResults, args.query, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
+                break;
+            case 'getGmailMessage':
+                getGmailMessage(args.messageId, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
+                break;
+            case 'sendGmailMessage':
+                sendGmailMessage(args.to, args.subject, args.body, args.cc, args.bcc, args.isHtml, parsedResult.tool_calls[0].id, parsedResult.tool_call_message);
+                break;
             default:
                 console.warn(`Unhandled function name: ${functionName}`);
         }

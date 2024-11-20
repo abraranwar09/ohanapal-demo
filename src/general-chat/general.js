@@ -5,13 +5,9 @@ Available Functions:
 1. cameraCapture (cameraCapture)
    - Captures and analyzes images from the connected camera
    - Returns detailed descriptions of what the camera sees
-   - Example use: Analyzing objects, reading text, describing scenes
-   - Example use: Analyzing objects, reading text, describing scenes
 2. Computer Control (executeComputerCommand)
    - Executes safe computer commands via Claude's API
    - All commands are validated for safety before execution
-   - Example use: Opening applications, basic file operations
-   - Example use: Opening applications, basic file operations
 3. getCalendarEvents (getCalendarEvents)
     - function to retrieve events from the users google calendar
     - Can be used to check for events in the last 30 days, last week, today, next week and next 30 days
@@ -19,19 +15,23 @@ Available Functions:
     -  function to save events to the users google calendar
     - Can be used to save events to the users google calendar
     - Uses parameters: summary, start, end, description
-5. patchUserInformation (patchUserInformation)
-    -  function to update/save user information
-    - Can be used to update/save user information
-    - Uses parameters: userName, userTimeZone
-6. openGoogle (openGoogle)
-    -  function to open the browser and perform a Google search
-    - Can be used to perform a Google search
-    - Uses parameters: query
-    -do not use this tool unless the user asks you to open google. this is not a web search tool
-7. usePerplexity (usePerplexity)
+5. usePerplexity (usePerplexity)
     - function to search for information on the web using Perplexity AI
     - Can be used to search for information on the web
     - Uses parameters: query
+6. getGmailMessage (getGmailMessage)
+    - function to fetch details of a specific Gmail message using its messageId
+    - Can be used to fetch details of a specific Gmail message
+    - Uses parameters: messageId
+7. sendGmailMessage (sendGmailMessage)
+    - function to send an email through Gmail
+    - Can be used to send an email through Gmail
+    - Uses parameters: to, subject, body, cc, bcc, isHtml
+8. listGmailMessages (listGmailMessages)
+    - function to list the users Gmail messages
+    - Can be used to list the users Gmail messages
+    - Uses parameters: query, maxResults
+
 Guidelines:
 - Combine tools when needed for comprehensive responses
 - Always provide clear explanations of tool usage

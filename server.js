@@ -53,14 +53,16 @@ app.use(passport.session());
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const audioRoutes = require('./routes/audio');
-const calendarRoutes = require('./routes/calendar');
+const googleRoutes = require('./routes/google');
 const locationRoutes = require('./routes/location');
 const perplexityRoutes = require('./routes/perplexity');
+
+
 // Use the routes
 app.use('/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/audio', audioRoutes);
-app.use('/calendar', calendarRoutes);
+app.use('/google', googleRoutes);
 app.use('/location', locationRoutes);
 app.use('/perplexity', perplexityRoutes);
 
