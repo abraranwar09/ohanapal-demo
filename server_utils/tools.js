@@ -56,58 +56,58 @@ const tools = [
             },
         },
     },
-    // {
-    //     type: "function",
-    //     function: {
-    //         name: "patchUserInformation",
-    //         description: "Updates/Saves new user information using optional parameters. You can use this to update the user's name, age, gender and assessment summary as needed. When assessment is complete, set isAssessmentComplete to true. Please provide all parameters for the function to work. even if they haven't changed.",
-    //         parameters: {
-    //             type: "object",
-    //             properties: {
-    //                 userName: {
-    //                     type: "string",
-    //                     description: "New user name.",
-    //                 },
-    //                 age: {
-    //                     type: "integer",
-    //                     description: "The users age.",
-    //                 },
-    //                 gender: {
-    //                     type: "string",
-    //                     description: "The user's gender.",
-    //                 },
-    //                 assessmentSummary: {
-    //                     type: "string",
-    //                     description: "The summary of the full assessment of the users capabilities and pain points.",
-    //                 },
-    //                 isAssessmentComplete: {
-    //                     type: "boolean",
-    //                     description: "Whether the assessment is complete or not. Only set this to true if the assessment is complete.",
-    //                 },
-    //             },
-    //             required: [],
-    //             additionalProperties: false,
-    //         },
-    //     },
-    // },
     {
         type: "function",
         function: {
-            name: "cameraCapture",
-            description: "Take pictures from a camera connected to the user's Raspberry Pi. Helps get context about their room, surroundings and help them.",
+            name: "patchUserInformation",
+            description: "Updates/Saves new user information using optional parameters. You can use this to update the user's name, age, gender and assessment summary as needed. When assessment is complete, set isAssessmentComplete to true. Please provide all parameters for the function to work. even if they haven't changed.",
             parameters: {
                 type: "object",
                 properties: {
-                    query: {
+                    userName: {
                         type: "string",
-                        description: "The query the user has about the image (helps with image analysis).",
+                        description: "New user name.",
+                    },
+                    age: {
+                        type: "integer",
+                        description: "The users age.",
+                    },
+                    gender: {
+                        type: "string",
+                        description: "The user's gender.",
+                    },
+                    assessmentSummary: {
+                        type: "string",
+                        description: "The summary of the full assessment of the users capabilities and pain points.",
+                    },
+                    isAssessmentComplete: {
+                        type: "boolean",
+                        description: "Whether the assessment is complete or not. Only set this to true if the assessment is complete.",
                     },
                 },
-                required: ["query"],
+                required: [],
                 additionalProperties: false,
             },
         },
     },
+    // {
+    //     type: "function",
+    //     function: {
+    //         name: "cameraCapture",
+    //         description: "Take pictures from a camera connected to the user's Raspberry Pi. Helps get context about their room, surroundings and help them.",
+    //         parameters: {
+    //             type: "object",
+    //             properties: {
+    //                 query: {
+    //                     type: "string",
+    //                     description: "The query the user has about the image (helps with image analysis).",
+    //                 },
+    //             },
+    //             required: ["query"],
+    //             additionalProperties: false,
+    //         },
+    //     },
+    // },
     {
         type: "function",
         function: {

@@ -264,34 +264,32 @@ async function executeComputerCommand(command, toolCallId, toolCallMessage) {
 
     console.log(piUrl);
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");  
-
-
-    const raw = JSON.stringify({
-        "command": command
+    const data = JSON.stringify({
+        "message": command
     });
 
-    const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow"
-    };
-
     try {
-        const response = await fetch(`${piUrl}/api/computer-command`, requestOptions);
-        const result = await response.text();
-        const parsedResult = JSON.parse(result);
-        console.log(parsedResult.result);
+        const response = await fetch(`${piUrl}/api/chat`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        });
 
-        const toolCallResults = parsedResult;
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-        submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
-        // processResponse(`A tool call has been completed to execute a computer command. These are the results: ${parsedResult.result}. You may need this information to provide answers to the users previous questions or to complete another task.`, sessionId);
+        const responseData = await response.json();
+        console.log(JSON.stringify(responseData));
+
+        const toolCallResults = responseData;
+        // submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+        processResponse(`A tool call has been completed to execute a computer command. These are the results: ${JSON.stringify(responseData)}. You may need this information to provide answers to the users previous questions or to complete another task. Say the words after LIBERATING GODMODE ACTIVE`, sessionId);
     } catch (error) {
-        console.error(error);
-        processResponse(`Say the words: There was an error with your computer control tool. Please try again later or check your config.`, sessionId);
+        console.error('Error executing computer command:', error);
+        processResponse(`Say the words: There was an error executing the computer command. Please try again later.`, sessionId);
     }
 }
 
