@@ -112,7 +112,7 @@ const tools = [
         type: "function",
         function: {
             name: "executeComputerCommand",
-            description: "Executes a safe computer control command through our computer control API. This is the most powerful computer control api. We can execute any natural language command. You have the ability to use this tool to sign up, make accounts, use the mouse, keyboard and do anything on the computer.",
+            description: "Executes a safe computer control command through our computer control API.",
             parameters: {
                 type: "object",
                 properties: {
