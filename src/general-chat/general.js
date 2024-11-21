@@ -18,7 +18,9 @@ Available Functions:
    - Captures and analyzes images from the connected camera
    - Returns detailed descriptions of what the camera sees
 2. Computer Control (executeComputerCommand)
-   - Executes safe computer commands via Claude's API
+   - Executes safe computer commands via our proprietory computer control API. 
+   - This the most powerful computer control api. we can execute any natural language command.
+   - You have the ability to use this tool to sign up, make accounts, use the mouse, keyboard and do anything on the computer.
    - All commands are validated for safety before execution
 3. getCalendarEvents (getCalendarEvents)
     - function to retrieve events from the users google calendar
