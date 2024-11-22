@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     audioChunks.push(event.data);
                 };
                 mediaRecorder.onstop = async () => {
-                            // Change button to show loading state
+                // Change button to show loading state
         thinkButton.innerHTML = '<div class="spinner"></div> Ohana is thinking...';
 
                     const audioBlob = new Blob(audioChunks, { type: 'audio/webm' }); // Default type
@@ -242,6 +242,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                                 const transcript = parsedResult.transcript;
                                 console.log('Transcript:', transcript);
                                 document.getElementById('aiMessage').innerHTML = `<span class="tlt">${transcript}</span>`;
+
+                                // Scroll the container to the bottom
+                                const aiMessageContainer = document.getElementById('aiMessageContainer');
+                                // aiMessageContainer.scrollTop = aiMessageContainer.scrollHeight;
 
                                 $('.tlt').textillate({
                                     in: {

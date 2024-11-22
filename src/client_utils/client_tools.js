@@ -1,3 +1,4 @@
+const computerControlEndpoint = 'https://treefrog-shining-unlikely.ngrok-free.app';
 //tool function for google search
 async function openGoogle(query, toolCallId, toolCallMessage) {
     console.log(query);
@@ -269,7 +270,7 @@ async function executeComputerCommand(command, toolCallId, toolCallMessage) {
     });
 
     try {
-        const response = await fetch(`${piUrl}/api/chat`, {
+        const response = await fetch(`${computerControlEndpoint}/api/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

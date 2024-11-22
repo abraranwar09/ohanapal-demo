@@ -86,6 +86,8 @@ body::before {
 .message.light {
     color: #a0aec0;
     font-weight: 300;
+    max-height: 70vh;
+    overflow-y: auto;
 }
 
 .visualization {
