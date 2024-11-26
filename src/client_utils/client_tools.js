@@ -1,5 +1,5 @@
 const computerControlEndpoint = 'https://treefrog-shining-unlikely.ngrok-free.app';
-const computerControlSocket = 'ws://treefrog-shining-unlikely.ngrok-free.app';
+const computerControlSocket = 'wss://treefrog-shining-unlikely.ngrok-free.app';
 
 //tool function for google search
 async function openGoogle(query, toolCallId, toolCallMessage) {
