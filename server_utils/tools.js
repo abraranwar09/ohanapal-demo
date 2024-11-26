@@ -112,7 +112,7 @@ const tools = [
         type: "function",
         function: {
             name: "executeComputerCommand",
-            description: "Executes a safe computer control command through our computer control API.",
+            description: "Executes a safe computer control command through our computer control API. You can send any natural language command to control the computer not a bash command.",
             parameters: {
                 type: "object",
                 properties: {
