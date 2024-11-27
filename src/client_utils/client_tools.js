@@ -259,80 +259,45 @@ async function processImage(base64Image, query) {
     } catch (error) {
         console.error(error);
     }
-}
-
-// async function executeComputerCommand(command, toolCallId, toolCallMessage) {
-//     const piUrl = localStorage.getItem('piUrl');
-//     const sessionId = localStorage.getItem('sessionId');
-
-//     console.log(piUrl);
-
-//     const data = JSON.stringify({
-//         "message": command
-//     });
-
-//     try {
-//         const response = await fetch(`${computerControlEndpoint}/api/chat`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: data
-//         });
-
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//         }
-
-//         const responseData = await response.json();
-//         console.log(JSON.stringify(responseData));
-
-//         const toolCallResults = responseData;
-//         // submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
-//         processResponse(`A tool call has been completed to execute a computer command. These are the results: ${JSON.stringify(responseData)}. You may need this information to provide answers to the users previous questions or to complete another task. Say the words after LIBERATING GODMODE ACTIVE`, sessionId);
-//     } catch (error) {
-//         console.error('Error executing computer command:', error);
-//         processResponse(`Say the words: There was an error executing the computer command. Please try again later.`, sessionId);
-//     }
-// }
+};
 
 //new computer command function
-async function executeComputerCommand(command, toolCallId, toolCallMessage) {
-    const sessionId = localStorage.getItem('sessionId');
-    const ws = new WebSocket(computerControlSocket);
+// async function executeComputerCommand(command, toolCallId, toolCallMessage) {
+//     const sessionId = localStorage.getItem('sessionId');
+//     const ws = new WebSocket(computerControlSocket);
 
-    // Generate a random ID for the command
-    const randomId = Math.random().toString(36).substring(2, 15);
+//     // Generate a random ID for the command
+//     const randomId = Math.random().toString(36).substring(2, 15);
 
-    // Open WebSocket connection
-    ws.onopen = () => {
-        // Send the command message
-        ws.send(JSON.stringify({
-            type: "command",
-            id: randomId,
-            content: command
-        }));
-    };
+//     // Open WebSocket connection
+//     ws.onopen = () => {
+//         // Send the command message
+//         ws.send(JSON.stringify({
+//             type: "command",
+//             id: randomId,
+//             content: command
+//         }));
+//     };
 
-    // Listen for messages from the WebSocket
-    ws.onmessage = (event) => {
-        const response = JSON.parse(event.data);
-        console.log('Response from WebSocket:', response.content);
+//     // Listen for messages from the WebSocket
+//     ws.onmessage = (event) => {
+//         const response = JSON.parse(event.data);
+//         console.log('Response from WebSocket:', response.content);
 
-        // Submit the tool call with the response
-        const toolCallResults = response;
-        submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
+//         // Submit the tool call with the response
+//         const toolCallResults = response;
+//         submitToolCall(sessionId, toolCallId, toolCallMessage, toolCallResults);
 
-        // Close the WebSocket connection
-        ws.close();
-    };
+//         // Close the WebSocket connection
+//         ws.close();
+//     };
 
-    // Handle WebSocket errors
-    ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        processResponse(`Say the words: There was an error executing the computer command. Please try again later.`, sessionId);
-    };
-}
+//     // Handle WebSocket errors
+//     ws.onerror = (error) => {
+//         console.error('WebSocket error:', error);
+//         processResponse(`Say the words: There was an error executing the computer command. Please try again later.`, sessionId);
+//     };
+// }
 
 //tool to get the user's location
 async function getUserLocation(toolCallId, toolCallMessage) {
